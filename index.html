@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Практическая работа № 3. Камень, ножницы, бумага</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Камень, Ножницы, Бумага</h1>
+    <p>Выберите один из вариантов:</p>
+    
+<div class="choices">
+    <button title="Камень (1)" onclick="knb(1)">Камень</button>
+    <button title="Ножницы (2)" onclick="knb(2)">Ножницы</button>
+    <button title="Бумага (3)" onclick="knb(3)">Бумага</button>
+</div>
+
+    <div class="score-board" id="score">Вы: 0 | Компьютер: 0</div>
+    <div class="status" id="status-text">Игра началась! Первым наберите 3 очка.</div>
+
+    <button id="restart-btn" hidden onclick="resetGame()">Играть снова</button>
+</div>
+
+<script>
+    var playerWins = 0;
+    var compWins = 0;
+    var gameOver = false;
+
+    function getName(choice) {
+        if (choice === 1) return "Камень";
+        if (choice === 2) return "Ножницы";
+        if (choice === 3) return "Бумага";
+    }
+
+    function knb(playerChoice) {
+        if (gameOver === true) return; 
+
+        var komp = Math.floor(1 + 3 * Math.random()); 
+        var statusText = "";
+        
+
+        if (playerChoice === komp) {
+            statusText = "Ничья! Оба выбрали " + getName(playerChoice);
+            document.getElementById("status-text").textContent = statusText;
+            return; 
+        }
+
+
+        if (
+            (playerChoice === 1 && komp === 2) || 
+            (playerChoice === 2 && komp === 3) || 
+            (playerChoice === 3 && komp === 1)    
+        ) {
+            statusText = "Выиграли вы! Вы: " + getName(playerChoice) + ", Компьютер: " + getName(komp);
+            playerWins++;
+        } 
+        else {
+            statusText = "Выиграл компьютер! Вы: " + getName(playerChoice) + ", Компьютер: " + getName(komp);
+            compWins++;
+        }
+
+        document.getElementById("status-text").textContent = statusText;
+        document.getElementById("score").textContent = "Вы: " + playerWins + " | Компьютер: " + compWins;
+
+        if (playerWins === 3 || compWins === 3) {
+            gameOver = true;
+            if (playerWins === 3) {
+                document.getElementById("status-text").textContent = "Поздравляем! Вы победили в игре!";
+            }
+            if (compWins === 3) {
+                document.getElementById("status-text").textContent = "Компьютер одержал финальную победу.";
+            }
+            document.getElementById("restart-btn").hidden = false;
+        }
+    }
+
+    function resetGame() {
+        playerWins = 0;
+        compWins = 0;
+        gameOver = false;
+        document.getElementById("score").textContent = "Вы: 0 | Компьютер: 0";
+        document.getElementById("status-text").textContent = "Игра началась! Первым наберите 3 очка.";
+        document.getElementById("restart-btn").hidden = true;
+    }
+</script>
+
+</body>
+</html>
